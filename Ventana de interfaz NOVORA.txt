@@ -1,0 +1,43 @@
+NOVORA 1.1 — VENTANA DE INTERFAZ
+================================
+
+OBJETIVO
+--------
+Documentar la interfaz de NOVORA correspondiente al estado de la versión 1.1.
+
+TECNOLOGÍA
+----------
+- C#
+- WPF
+- XAML
+- Visual Studio
+
+ESTRUCTURA DE LA INTERFAZ
+--------------------------
+La ventana principal contempla una interfaz centralizada para visualizar y
+controlar las funciones relacionadas con el dispositivo Android.
+
+Elementos documentados:
+
+1. Ventana principal de NOVORA.
+2. Barra superior y título de la aplicación.
+3. Área de estado del dispositivo.
+4. Estado de ADB.
+5. Estado de la conexión USB.
+6. Estado de Gnirehtet/VPN.
+7. Estado de scrcpy.
+8. Área de herramientas y controles.
+9. Área de consola/estado cuando esté habilitada.
+10. Configuración del sistema y de juego.
+
+ESTILO
+------
+La interfaz busca mantener una apariencia moderna, limpia y consistente,
+con paneles diferenciados, estados visibles y controles accesibles.
+
+ESTADO
+------
+Esta documentación se limita a NOVORA 1.1.
+
+Los diseños o funciones que se incorporen después de 1.1 deben documentarse
+como cambios de una versión posterior.

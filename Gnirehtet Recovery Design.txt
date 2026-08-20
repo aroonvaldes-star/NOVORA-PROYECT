@@ -1,0 +1,51 @@
+NOVORA — GNIREHTET RECOVERY DESIGN
+====================================
+
+VERSIÓN DE REFERENCIA
+---------------------
+Este documento describe un diseño posterior a NOVORA 1.1.
+
+IMPORTANTE
+----------
+Gnirehtet Recovery NO debe considerarse una función terminada de NOVORA 1.1.
+El documento sirve como base de diseño para una versión posterior.
+
+OBJETIVO
+--------
+Crear un sistema de recuperación automática cuando la sesión de Gnirehtet
+o su VPN falle y deje al dispositivo en un estado de conectividad incorrecto.
+
+FLUJO PROPUESTO
+---------------
+1. Detectar que Gnirehtet dejó de funcionar.
+2. Detener y limpiar la sesión anterior.
+3. Cerrar correctamente la VPN si permanece activa.
+4. Restaurar la conectividad normal del dispositivo.
+5. Comprobar que el dispositivo tenga Internet.
+6. Permitir/forzar el retorno a Wi-Fi cuando corresponda.
+7. Reintentar Gnirehtet.
+8. Informar visualmente el resultado en NOVORA.
+
+ESTADOS
+-------
+El flujo propuesto utiliza estados claros:
+
+- Recuperando
+- Conectando
+- Conectado
+- Falló
+
+ARQUITECTURA PROPUESTA
+----------------------
+El Recovery debe implementarse como un servicio separado de MainWindow,
+evitando colocar toda la lógica de recuperación directamente en la interfaz.
+
+OBJETIVO DE SEGURIDAD Y ESTABILIDAD
+-----------------------------------
+El sistema debe evitar dejar una VPN activa, una sesión Gnirehtet
+incompleta o un estado de red intermedio cuando una conexión falle.
+
+ESTADO
+------
+Diseño pendiente de implementación y validación.
+No forma parte de las características confirmadas de NOVORA 1.1.

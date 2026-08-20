@@ -1,0 +1,60 @@
+NOVORA 1.1 — INTEGRACIÓN CON VISUAL STUDIO
+===========================================
+
+OBJETIVO
+--------
+Documentar cómo se organiza NOVORA 1.1 dentro de Visual Studio y separar lo
+que ya existe de las integraciones futuras.
+
+SOLUCIÓN
+--------
+La solución actual es:
+
+NOVORA.sln
+
+Dentro de ella se encuentra:
+
+src\NOVORA.Launcher\NOVORA.Launcher.csproj
+
+La solución está configurada para trabajar con Visual Studio.
+
+PROYECTO
+--------
+Proyecto principal documentado:
+
+NOVORA.Launcher
+
+LENGUAJE Y UI
+-------------
+- C#
+- WPF
+- XAML
+
+INTEGRACIÓN DE HERRAMIENTAS
+---------------------------
+NOVORA integra herramientas destinadas a la conexión y control del
+dispositivo Android, entre ellas:
+
+- ADB
+- scrcpy
+- Gnirehtet
+
+BRIDGE / MCP
+------------
+La posibilidad de conectar ChatGPT con el proyecto local mediante un Bridge
+o MCP se considera una integración de desarrollo futura.
+
+No debe presentarse como una función terminada de NOVORA 1.1.
+
+OBJETIVO DEL BRIDGE FUTURO
+--------------------------
+El concepto propuesto consiste en permitir:
+
+- trabajar con archivos del proyecto;
+- revisar errores de compilación;
+- ejecutar procesos de build;
+- devolver resultados;
+- facilitar el flujo entre ChatGPT, el proyecto local y Visual Studio.
+
+Este concepto pertenece al desarrollo posterior a 1.1 hasta que sea
+implementado y validado.

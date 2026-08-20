@@ -1,0 +1,46 @@
+NOVORA 1.1 — REVISIÓN DEL PROYECTO
+================================
+
+ALCANCE
+-------
+Este documento fija la documentación del proyecto hasta NOVORA 1.1.
+No incluye funciones que todavía se encuentran en diseño para versiones posteriores.
+
+ARQUITECTURA
+------------
+La solución actual de Visual Studio corresponde a un proyecto C# denominado
+NOVORA.Launcher. La solución NOVORA.sln utiliza Visual Studio y contiene el
+proyecto:
+
+src\NOVORA.Launcher\NOVORA.Launcher.csproj
+
+La interfaz de NOVORA se trabaja con WPF/XAML y la lógica de la aplicación
+se mantiene en C#.
+
+COMPONENTES PRINCIPALES DOCUMENTADOS
+------------------------------------
+- Interfaz principal de NOVORA.
+- Gestión y detección del dispositivo Android.
+- Integración con ADB.
+- Integración con scrcpy.
+- Integración con Gnirehtet.
+- Estado de conexión y servicios.
+- Herramientas centralizadas desde una aplicación de Windows.
+
+ESTADO DE LA DOCUMENTACIÓN
+--------------------------
+Esta revisión representa el estado documentado de NOVORA 1.1.
+
+Los problemas, mejoras o funciones posteriores a 1.1 deben documentarse en
+la versión correspondiente y no deben presentarse como características
+terminadas de 1.1.
+
+NOTA SOBRE PYTHON
+-----------------
+Python no forma parte de la arquitectura principal documentada de NOVORA 1.1.
+La interfaz y el proyecto actual se mantienen en C# + WPF/XAML.
+
+NOTA SOBRE GNIREHTET RECOVERY
+-----------------------------
+El sistema de recuperación automática de Gnirehtet se considera diseño
+posterior a 1.1. No debe anunciarse como una función terminada de NOVORA 1.1.
