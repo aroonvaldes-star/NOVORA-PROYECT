@@ -81,7 +81,7 @@ Write-Host 'Aplicando puente NOVORA-LINK 1.3.1...' -ForegroundColor Cyan
 Replace-RequiredText $projectFile '<Version>1.3.0</Version>' '<Version>1.3.1</Version>'
 Replace-RequiredText $updateFile 'aroonvaldes-star/NOVORA-PROYECT' 'aroonvaldes-star/NOVORA-LINK'
 Replace-RequiredText $updateFile 'new Version(1, 2, 0)' 'new Version(1, 3, 1)'
-Replace-RequiredRegex $updateFile 'new ProductInfoHeaderValue\(\s*"NOVORA",\s*"1\.3"\)' 'new ProductInfoHeaderValue("NOVORA", "1.3.1")'
+Replace-RequiredRegex $updateFile 'new ProductInfoHeaderValue\(\s*"NOVORA",\s*"1\.2"\)' 'new ProductInfoHeaderValue("NOVORA", "1.3.1")'
 Replace-RequiredText $mainWindow 'Title="NOVORA 1.3"' 'Title="NOVORA 1.3.1"'
 Replace-RequiredText $settingsWindow 'Title="Configuración — NOVORA 1.3"' 'Title="Configuración — NOVORA 1.3.1"'
 Replace-RequiredText $settingsWindow 'Text="BASE 1.3"' 'Text="BASE 1.3.1"'
