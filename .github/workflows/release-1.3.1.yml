@@ -1,0 +1,141 @@
+name: NOVORA-LINK 1.3.1 Legacy Update Bridge
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/release-1.3.1.yml"
+      - "scripts/Apply-Bridge-1.3.1.ps1"
+      - "RELEASE_NOTES_1.3.1.md"
+      - "SOURCE_PIN.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: novora-link-1.3.1-bridge
+  cancel-in-progress: false
+
+jobs:
+  build-test-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout legacy bridge repository
+        uses: actions/checkout@v4
+        with:
+          path: bridge
+
+      - name: Checkout exact NOVORA-LINK v1.3 source
+        uses: actions/checkout@v4
+        with:
+          repository: aroonvaldes-star/NOVORA-LINK
+          ref: 305338e2477b2194673479a69bf90152fc89744a
+          path: source
+          fetch-depth: 1
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Apply 1.3.1 bridge patch
+        shell: pwsh
+        run: ./bridge/scripts/Apply-Bridge-1.3.1.ps1 -SourceRoot ./source
+
+      - name: Restore verified runtime tools
+        shell: pwsh
+        working-directory: source
+        run: ./scripts/Setup-Tools.ps1
+
+      - name: Restore
+        working-directory: source
+        run: dotnet restore ./NOVORA.sln
+
+      - name: Test
+        working-directory: source
+        run: dotnet test ./NOVORA.sln -c Release --no-restore
+
+      - name: Publish Windows x64 self-contained
+        shell: pwsh
+        working-directory: source
+        run: |
+          $version = '1.3.1'
+          $publishDir = Join-Path $PWD 'artifacts\publish\win-x64'
+
+          dotnet publish ./src/NOVORA/NOVORA.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:Version=$version `
+            -p:AssemblyVersion=1.3.1.0 `
+            -p:FileVersion=1.3.1.0 `
+            -p:InformationalVersion=$version `
+            -o $publishDir
+
+          if ($LASTEXITCODE -ne 0) {
+              throw "dotnet publish terminó con código $LASTEXITCODE."
+          }
+
+      - name: Ensure Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup *\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+
+          if (-not $iscc) {
+              choco install innosetup --yes --no-progress
+          }
+
+      - name: Build installer
+        shell: pwsh
+        working-directory: source
+        run: |
+          $version = '1.3.1'
+          $publishDir = Join-Path $PWD 'artifacts\publish\win-x64'
+          $iscc = Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup *\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+
+          if (-not $iscc) {
+              throw 'No se encontró ISCC.exe.'
+          }
+
+          & $iscc.FullName `
+            "/DAppVersion=$version" `
+            "/DPublishDir=$publishDir" `
+            './Installer/NOVORA.Installer.iss'
+
+          if ($LASTEXITCODE -ne 0) {
+              throw "Inno Setup terminó con código $LASTEXITCODE."
+          }
+
+          $installer = Join-Path $PWD "Installer\output\NOVORA-Setup-$version.exe"
+
+          if (-not (Test-Path -LiteralPath $installer)) {
+              throw "No se generó el instalador: $installer"
+          }
+
+          "INSTALLER=$installer" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Generate SHA-256
+        shell: pwsh
+        run: |
+          $hash = Get-FileHash -LiteralPath $env:INSTALLER -Algorithm SHA256
+          $shaFile = "$env:INSTALLER.sha256"
+          $hash.Hash.ToLowerInvariant() | Out-File -FilePath $shaFile -Encoding ascii -NoNewline
+          "SHA_FILE=$shaFile" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Publish stable v1.3.1 bridge release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.3.1
+          target_commitish: main
+          name: NOVORA-LINK 1.3.1 — Update Bridge
+          body_path: bridge/RELEASE_NOTES_1.3.1.md
+          draft: false
+          prerelease: false
+          make_latest: true
+          overwrite_files: true
+          files: |
+            ${{ env.INSTALLER }}
+            ${{ env.SHA_FILE }}
